@@ -126,14 +126,6 @@ class douban:
 
     # 保存数据，将数据保存到文件中
     def save(self):
-        pass
-
-    # 数据可视化
-    def draw(self):
-        pass
-
-    def quit(self):
-        self.browser.quit()
 
 
         for item in self.dict:
@@ -145,11 +137,19 @@ class douban:
 
         self.workbook.save('豆瓣250.xls')
 
+    # 数据可视化
+    # def draw(self):
+    #     pass
+
+    def quit(self):
+        self.browser.quit()
+
+
 
 if __name__ == '__main__':
     obj = douban()
     obj.init()
     obj.crawl()
     obj.save()
-    obj.draw()
+    # obj.draw()
     obj.quit()
