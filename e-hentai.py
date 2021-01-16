@@ -23,7 +23,7 @@ class Eh:
         self.dlService = dl()
 
         self.wait = WebDriverWait(self.driver, 10)
-        url = 'https://e-hentai.org/s/85e6829eea/1820380-1'
+        url = 'https://e-hentai.org/s/d02a4dad50/1821771-1'
         self.driver.get(url)
         # self.pic = []
 

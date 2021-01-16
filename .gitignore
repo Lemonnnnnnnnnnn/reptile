@@ -1,5 +1,6 @@
 *.xls
 *.txt
 /pic/
+/Pic/
 /.idea/
 /__pycache__/

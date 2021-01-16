@@ -31,11 +31,6 @@ class database:
         self.cursor.executemany(sql , req)
         self.db.commit()
 
-    def removeAll(self):
-        sql = "TRUNCATE TABLE ip"
-        self.cursor.execute(sql)
-        pass
-
     def remove(self):
         pass
 

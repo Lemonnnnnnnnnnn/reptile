@@ -11,9 +11,13 @@ import requests
 class crawler:
     def __init__(self):
         print('初始化')
-        self.capa = DesiredCapabilities.EDGE
-        self.capa["pageLoadStrategy"] = 'none'  # 懒加载模式
-        self.driver = webdriver.Edge(capabilities=self.capa)
+        # self.capa = DesiredCapabilities.CHROME
+        opt = webdriver.ChromeOptions()
+        # self.capa["pageLoadStrategy"] = 'none'  # 懒加载模式
+        desired_capabilities = webdriver.DesiredCapabilities.CHROME.copy()
+        desired_capabilities['pageLoadStrategy'] = 'none'
+
+        self.driver = webdriver.Chrome(options=opt, desired_capabilities=desired_capabilities)
         self.isEnd = False
         self.wait = WebDriverWait(self.driver, 10)
         self.data = []
@@ -25,9 +29,10 @@ class crawler:
         for i in range(len(self.data)):
             address = self.data[i]['address']
             port = self.data[i]['port']
+            type = self.data[i]['type']
             try:
                 proxies = {
-                    'http': "http://" + address + ":" + port
+                    type: type + "://" + address + ":" + port
                 }
                 print('正在检测...')
                 requests.get('http://www.baidu.com', proxies=proxies)
@@ -37,41 +42,6 @@ class crawler:
             else:
                 self.finalData.append(self.data[i])
                 print('success')
-
-    def parse_yun(self):
-        url = 'http://www.ip3366.net/'
-        self.driver.get(url)
-        try:
-            address = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, '//tbody/tr')))
-            for item in address:
-                address = item.find_element_by_xpath('.//td[1]').text
-                type = item.find_element_by_xpath('.//td[4]').text
-                port = item.find_element_by_xpath('.//td[2]').text
-
-                # 检测可用性
-                try:
-                    proxies = {
-                        'http': "http://" + address + ":" + port
-                    }
-                    print('正在检测...')
-                    requests.get('http://www.baidu.com', proxies=proxies)
-                except Exception as e:
-                    print(e)
-                    continue
-                else:
-                    print('success')
-
-                lastTime = item.find_element_by_xpath('.//td[last()]').text
-
-                self.data.append({
-                    'address': address,
-                    'port': port,
-                    'lastTime': lastTime,
-                    'type': type
-                })
-        except Exception as e:
-            print(e)
-            self.isEnd = True
 
     def parse_jiangxianli(self):
         url = 'https://ip.jiangxianli.com/'
@@ -95,25 +65,31 @@ class crawler:
             print(e)
             self.isEnd = True
 
+    def parse_xiaoHuan(self):
+        url = 'https://ip.ihuan.me/'
+        self.driver.get(url)
+        try:
+            address = self.wait.until(EC.presence_of_all_elements_located((By.XPATH, '//tbody/tr')))
+            for item in address:
+                address = item.find_element_by_xpath('.//td[1]').text
+                if (item.find_element_by_xpath('.//td[5]').text == '不支持'):
+                    type = 'http'
+                else:
+                    type = 'https'
 
-    # def turn_page(self):
-    #     try:
-    #         btn = self.wait.until(EC.presence_of_element_located((By.XPATH, '//a[text()="下一页"]')))
-    #     except TimeoutException:
-    #         self.isEnd = True
-    #     except NoSuchElementException:
-    #         self.isEnd = True
-    #     else:
-    #         btn.click()
-    #         time.sleep(3)
+                port = item.find_element_by_xpath('.//td[2]').text
+                lastTime = item.find_element_by_xpath('.//td[last()]').text
 
-    # def crawl(self):
-    #     self.parse_page()
-    # num = 1
-    # while (not self.isEnd ):
-    #     print('正在爬取第 ' + str(num) + ' 页 ...')
-    # self.turn_page()
-    # num += 1
+                self.data.append({
+                    'address': address,
+                    'port': port,
+                    'lastTime': lastTime,
+                    'type': type
+                })
+
+        except Exception as e:
+            print(e)
+            self.isEnd = True
 
     def save(self):
         db = database()
@@ -127,9 +103,8 @@ class crawler:
 
 if __name__ == '__main__':
     obj = crawler()
-    # obj.parse_yun()
     obj.parse_jiangxianli()
+    # obj.parse_xiaoHuan()
     obj.quit()
     obj.judge()
     obj.save()
-

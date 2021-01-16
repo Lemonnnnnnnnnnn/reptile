@@ -13,6 +13,7 @@ class dl:
             os.makedirs('pic')
 
     def execute(self, url, num):
+        # 从数据库里取出IP地址
         db = database()
         IPArr = db.search()
         tryTimes = 3  # 重试的次数
@@ -30,6 +31,7 @@ class dl:
             try:
                 print('正在进行第 ' + str(i + 1) + ' 次尝试' )
                 proxy_ip = {'http': random.choice(IPArr)}
+                print(proxy_ip)
                 img = requests.get(url, headers=headers, proxies=proxy_ip, timeout=10).content
                 break
 
