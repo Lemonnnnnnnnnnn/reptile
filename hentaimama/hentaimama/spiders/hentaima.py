@@ -1,9 +1,7 @@
 import scrapy
-from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait  # 等待页面加载某些元素
-from selenium.webdriver.common.by import By  # 按照什么方式查找，By.ID,By.CSS_SELECTOR
-from selenium.webdriver.support import expected_conditions as EC
 from .aria2_download import aria2DL
+import logging
+import re
 
 
 class HentaimaSpider(scrapy.Spider):
@@ -21,25 +19,24 @@ class HentaimaSpider(scrapy.Spider):
 
     def video_item(self, response):
         # 由于iframe无法直接获取到目标元素 ， 解决方法：进入iframe页面
-        iframe_url = response.xpath('//iframe/@src').get()
-        name = response.xpath('//*[@id="info"]/h1/text()').get()
-        useragent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'
-        opts = webdriver.ChromeOptions()
-        opts.add_argument('--headless')
-        opts.add_argument('user-agent=' + useragent)
-        opts.add_argument("--window-size=1245,1254")
-        opts.add_argument('--disable-gpu')
+        try:
+            iframe_url = response.xpath('//iframe/@src').get()
+            yield scrapy.Request(url=iframe_url, callback=self.iframe)
+        except Exception as e:
+            logging.error('无法在当前页面找到视频资源')
+            logging.error(e)
 
-        driver = webdriver.Chrome(options=opts)
-        wait = WebDriverWait(driver, 10)
-        driver.get(iframe_url)
-        video = wait.until(EC.presence_of_element_located((By.XPATH, '//video')))
-        # driver.save_screenshot('test.png')
-        video_url = video.get_attribute('src')
+    def iframe(self, response):
+        try:
+            if (re.search(r"file: '(.+)',", response.text)):
+                case1 = re.search(r"file: '(.+)',", response.text).group(1)
+                logging.info('第一种获取方式：' + case1)
+            else:
+                case2 = response.xpath('//video[@id="my-video"]/source/@src').get()
+                logging.info('第二种获取方式：' + case2)
 
-        dl = aria2DL()
-        print('正在下载，请等待...')
-        dl.downloadOne(url=video_url, fileName=name)
+        except Exception as e:
+            logging.info('頁面結構為：' + response.text)
+            logging.error(e)
 
-        driver.quit()
-
+        pass

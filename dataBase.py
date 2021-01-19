@@ -7,7 +7,7 @@ class database:
 
     def insert_single(self , address , port , lastTime ,type):
 
-        into = "INSERT INTO ip(address,port,lastTime , type) VALUES (%s, %s, %s ,%s)"
+        into = "INSERT INTO lagou(address,port,lastTime , type) VALUES (%s, %s, %s ,%s)"
         values = (address, port, lastTime , type)
 
         try:
