@@ -6,6 +6,7 @@ import re
 from common import customRequest,proc_exist,remove_aria2
 from aria2_download import a2D
 import win32api
+import constant
 
 
 class CrawlOne:
@@ -13,23 +14,23 @@ class CrawlOne:
         self.threadPool = ThreadPoolExecutor(max_workers=5)
         self.start_url = start_url
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'}
+            'User-Agent': constant.user_agent}
         self.proxies = {
-            'http': 'http://localhost:7890',
-            'https': 'http://localhost:7890',
+            'http': constant.proxy,
+            'https': constant.proxy,
         }
         self.End = False
         self.parseImg = 0
-        self.down_path = r'D:\18x\pic'
-        self.down_path_full = r'D:\18x\pic'
+        self.down_path = constant.pic_download_url
+        self.down_path_full = constant.pic_download_url
 
         self.dlServer = a2D()
         # 提前开启软件
-        if not proc_exist('IDMan.exe'):
-            win32api.ShellExecute(0, 'open', r'C:\Program Files (x86)\Internet Download Manager\IDMan.exe', '', '', 1)
-
-        if not proc_exist('aria2c.exe'):
-            win32api.ShellExecute(0, 'open', r'D:\aria2\HideRun.vbs', '', '', 1)
+        # if not proc_exist('IDMan.exe'):
+        #     win32api.ShellExecute(0, 'open', r'C:\Program Files (x86)\Internet Download Manager\IDMan.exe', '', '', 1)
+        #
+        # if not proc_exist('aria2c.exe'):
+        #     win32api.ShellExecute(0, 'open', r'D:\aria2\HideRun.vbs', '', '', 1)
 
         self.threads = []
         self.beginTime = time.time()
@@ -97,9 +98,8 @@ class CrawlOne:
             print('访问图片页失败')
             print(e)
 
-
-if __name__ == '__main__':
-    start_url = 'https://e-hentai.org/g/1833621/945fd3acba/'
+def run_crawler(start_url):
+    print('开始爬虫...')
     obj = CrawlOne(start_url)
     obj.run()
     for future in as_completed(obj.threads):
@@ -114,3 +114,9 @@ if __name__ == '__main__':
     print('校验完成')
     print('移除出错的aria2文件...')
     remove_aria2(obj.down_path_full)
+    print('完成！')
+
+
+# if __name__ == '__main__':
+#     start_url = 'https://e-hentai.org/g/1841464/3c43b8b6b0/'
+#     run_crawler(start_url)

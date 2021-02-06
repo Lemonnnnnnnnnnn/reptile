@@ -1,16 +1,15 @@
 from pyaria2 import Aria2RPC
 import time
 from subprocess import call
-
+import constant
 
 class a2D:
     def __init__(self):
         self.server = Aria2RPC()
         self.downloadList = []
-        self.IDM = "C:\Program Files (x86)\Internet Download Manager\IDMan.exe"
-        self.down_path = r'D:\18x\pic'
+        self.IDM = constant.idm_path
+        self.down_path = constant.pic_download_url
         self.download_fail = 0
-
 
     def get_file_from_url(self, url, file_name, dir):
         try:

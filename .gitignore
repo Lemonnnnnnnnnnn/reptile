@@ -1,6 +1,6 @@
 *.xls
-*.txt
 /pic/
 /Pic/
 /.idea/
 /__pycache__/
+/eHentai_requests/django/www/public/

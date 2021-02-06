@@ -5,24 +5,25 @@ import time
 from e1 import CrawlOne
 from common import proc_exist
 import win32api
+import constant
 
 class Crawl:
     def __init__(self):
-        self.start_url = 'http://e-hentai.org/?f_search=chinese'
+        self.start_url = constant.crawl_start_url
         self.headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36'}
+            'User-Agent': constant.user_agent}
         self.proxies = {
-            'http': 'http://localhost:7890',
-            'https': 'http://localhost:7890',
+            'http': constant.proxy,
+            'https': constant.proxy,
         }
         self.End = False
         self.parseImgTotal = 0
         # 提前开启软件
-        if not proc_exist('IDMan.exe'):
-            win32api.ShellExecute(0, 'open', r'C:\Program Files (x86)\Internet Download Manager\IDMan.exe', '', '', 1)
+        if not proc_exist(constant.idm_name):
+            win32api.ShellExecute(0, 'open', constant.idm_path, '', '', 1)
 
-        if not proc_exist('aria2c.exe'):
-            win32api.ShellExecute(0, 'open', r'D:\aria2\HideRun.vbs', '', '', 1)
+        if not proc_exist(constant.aria2_name):
+            win32api.ShellExecute(0, 'open', constant.aria2_path, '', '', 1)
 
         self.beginTime = time.time()
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<div id="app">
+    <el-row type="flex" class="row-bg">
+        <el-col class="content" v-for="(item,index) in info" :span="4">
+            <div class="center">
+                <img :src="item.face_url" alt="图片">
+                <p class="inviteCode">{{item.link_url[0]}}</p>
+                <el-button class="copy" @click="CopyUrl(index)">复制链接</el-button>
+            </div>
+            <!--            <div class="link center"><a :href='item.link_url[0]' target="_blank">链接</a></div>-->
+        </el-col>
+    </el-row>
+</div>
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: () => ({
+            info: [],
+        }),
+        mounted() {
+            axios
+                .get('http://localhost:8000')
+                .then(response => {
+                    const dataList = response.data;
+                    dataList.forEach((i) => {
+                        this.info.push(i);
+                    });
+                });
+        },
+        methods: {
+            CopyUrl(data) {
+                var Url2 = document.getElementsByClassName("inviteCode")[data].innerText;
+                var oInput = document.createElement("input");
+                oInput.value = Url2;
+                document.body.appendChild(oInput);
+                oInput.select(); // 选择对象
+                document.execCommand("Copy"); // 执行浏览器复制命令
+                oInput.className = "oInput";
+                oInput.style.display = "none";
+                this.$message({
+                    message: "复制成功!",
+                    type: 'success'
+                })
+            },
+        }
+    });
+</script>
+<style>
+    .row-bg {
+        display: flex;
+        flex-wrap: wrap
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .link {
+        margin-bottom: 20px;
+    }
+
+
+</style>
+</html>

@@ -1,0 +1,5 @@
+pymongo==3.11.2
+pyaria2==0.1.1
+pywin32==227
+parsel==1.5.2
+requests==2.25.1
