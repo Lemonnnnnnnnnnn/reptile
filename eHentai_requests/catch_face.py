@@ -63,6 +63,7 @@ class Crawl:
                 for item in album_list:
                     face_ele = item.xpath('.//td[@class="gl2' + self.b + '"]/div[@class="glthumb"]/div/img')
                     link_url = item.xpath('.//td[@class="gl3' + self.b + ' glname"]/a/@href').getall()
+                    album_name = item.xpath('.//td[@class="gl3c glname"]/a/div/text()').getall()
                     self.num += 1
 
                     if (face_ele.get() != None):
@@ -72,14 +73,16 @@ class Crawl:
                             call([self.IDM, '/d', face_url, '/p', self.down_path, '/f', str(self.num) + '.jpg', '/a',
                                   '/n'])
                             self.db[self.item_name].insert_one(
-                                {'link_url': link_url, 'face_url': './public/' + str(self.num) + '.jpg'})
+                                {'link_url': link_url, 'face_url': './public/' + str(self.num) + '.jpg',
+                                 'name': album_name})
                         else:
                             face_url = face_ele.xpath('.//@src').get()
                             # 存储图片链接
                             call([self.IDM, '/d', face_url, '/p', self.down_path, '/f', str(self.num) + '.jpg', '/a',
                                   '/n'])
                             self.db[self.item_name].insert_one(
-                                {'link_url': link_url, 'face_url': './public/' + str(self.num) + '.jpg'})
+                                {'link_url': link_url, 'face_url': './public/' + str(self.num) + '.jpg',
+                                 'name': album_name})
 
 
         except Exception as e:

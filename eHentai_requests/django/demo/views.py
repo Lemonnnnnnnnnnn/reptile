@@ -29,7 +29,8 @@ db = client[constant.mongodb_db_name]
 col = db[constant.mongodb_collection_name]
 list = []
 for i in col.find():
-    list.append({'link_url': i['link_url'], 'face_url': i['face_url']})
+    list.append({'link_url': i['link_url'], 'face_url': i['face_url'],
+                                 'name': i['name']})
 
 
 def hello(request):

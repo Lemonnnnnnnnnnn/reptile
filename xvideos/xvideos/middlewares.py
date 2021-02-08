@@ -4,9 +4,17 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
 # useful for handling different item types with a single interface
-from itemadapter import is_item, ItemAdapter
+import time
+import random
+
+
+class ProxyMiddleware:
+    def process_request(self, request, spider):
+        delay = random.randint(0, 3)
+        time.sleep(delay)
+        proxy = 'http://localhost:7890'
+        request.meta['proxy'] = proxy
 
 
 class XvideosSpiderMiddleware:

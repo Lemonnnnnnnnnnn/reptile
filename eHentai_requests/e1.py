@@ -3,9 +3,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import parsel
 import time
 import re
-from common import customRequest,proc_exist,remove_aria2
+from common import customRequest, remove_aria2, random_chose_node
 from aria2_download import a2D
-import win32api
 import constant
 
 
@@ -25,12 +24,6 @@ class CrawlOne:
         self.down_path_full = constant.pic_download_url
 
         self.dlServer = a2D()
-        # 提前开启软件
-        # if not proc_exist('IDMan.exe'):
-        #     win32api.ShellExecute(0, 'open', r'C:\Program Files (x86)\Internet Download Manager\IDMan.exe', '', '', 1)
-        #
-        # if not proc_exist('aria2c.exe'):
-        #     win32api.ShellExecute(0, 'open', r'D:\aria2\HideRun.vbs', '', '', 1)
 
         self.threads = []
         self.beginTime = time.time()
@@ -57,6 +50,8 @@ class CrawlOne:
 
     def parse_album(self, url):
         print('正在爬取相簿每一页所有的图片链接...')
+        # 切换clash节点
+        random_chose_node()
         # 爬取相簿每一页所有的图片链接
         try:
             if (self.End == False):
@@ -98,6 +93,7 @@ class CrawlOne:
             print('访问图片页失败')
             print(e)
 
+
 def run_crawler(start_url):
     print('开始爬虫...')
     obj = CrawlOne(start_url)
@@ -115,7 +111,6 @@ def run_crawler(start_url):
     print('移除出错的aria2文件...')
     remove_aria2(obj.down_path_full)
     print('完成！')
-
 
 # if __name__ == '__main__':
 #     start_url = 'https://e-hentai.org/g/1841464/3c43b8b6b0/'

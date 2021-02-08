@@ -9,7 +9,7 @@ import constant
 
 class Crawl:
     def __init__(self):
-        self.start_url = constant.crawl_start_url
+        self.start_url = constant.crawl_custom
         self.headers = {
             'User-Agent': constant.user_agent}
         self.proxies = {
@@ -69,7 +69,7 @@ class Crawl:
 
 if __name__ == '__main__':
     obj = Crawl()
-    obj.run(2)
+    obj.run()
 
     print('总爬取完成')
     print('总成功爬取了' + str(obj.parseImgTotal) + '张图片')
