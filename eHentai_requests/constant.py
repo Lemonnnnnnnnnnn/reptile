@@ -25,9 +25,9 @@ clash_url = 'http://localhost:' + clash_port + '/proxies/Proxy'
 # 爬虫相关设置
 # 爬取封面
 crawl_start_url = 'https://e-hentai.org/?f_search=chinese'
-crawl_custom = 'https://e-hentai.org/?f_search=ahemaru+chinese'
+crawl_custom = 'https://e-hentai.org/?f_search=kazuhiro+chinese'
 face_download_url = r'D:\technology\python\reptile\eHentai_requests\django\www\public'
-crawl_num = 1
+crawl_num = 5
 
 # 图片存储路径
-pic_download_url = r'D:\18x\pic'
+pic_download_url = r'E:\18x\pic'

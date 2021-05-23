@@ -11,7 +11,7 @@
         <el-col class="content" v-for="(item,index) in info" :span="4">
             <div class="center">
                 <img :src="item.face_url" alt="图片">
-                <p class="inviteCode">url：{{item.link_url[0]}}</p>
+                <p class="inviteCode">{{item.link_url[0]}}</p>
                 <p>name：{{item.name[0]}}</p>
                 <el-button class="copy" @click="CopyUrl(index)">复制链接</el-button>
             </div>

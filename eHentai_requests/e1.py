@@ -1,9 +1,8 @@
-import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import parsel
 import time
 import re
-from common import customRequest, remove_aria2, random_chose_node
+from common import customRequest, remove_aria2
 from aria2_download import a2D
 import constant
 
@@ -37,7 +36,7 @@ class CrawlOne:
         # 爬取相簿页数
         try:
             if (self.End == False):
-                html = requests.get(url=url, headers=self.headers, proxies=self.proxies)
+                html = customRequest(url=url, headers=self.headers, proxies=self.proxies)
                 sel = parsel.Selector(html.text)
                 album_page_list_length = sel.xpath('//table[@class="ptt"]/tr/td[last()-1]/a/text()').get()
                 for i in range(int(album_page_list_length)):
@@ -50,12 +49,11 @@ class CrawlOne:
 
     def parse_album(self, url):
         print('正在爬取相簿每一页所有的图片链接...')
-        # 切换clash节点
-        random_chose_node()
+
         # 爬取相簿每一页所有的图片链接
         try:
             if (self.End == False):
-                html = requests.get(url=url, headers=self.headers, proxies=self.proxies)
+                html = customRequest(url=url, headers=self.headers, proxies=self.proxies)
                 sel = parsel.Selector(html.text)
                 detail_list = sel.xpath('//div[@class="gdtm"]/div/a/@href').getall()
 

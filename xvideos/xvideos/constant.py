@@ -31,4 +31,4 @@ clash_url = 'http://localhost:' + clash_port + '/proxies/Proxy'
 #
 # # 图片存储路径
 # pic_download_url = r'D:\18x\pic'
-video_download_url = r'D:\18x\video2'
+video_download_url = r'E:\18x\video2'

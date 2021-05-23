@@ -9,6 +9,7 @@ import constant
 
 def random_chose_node():
     print('随机选择节点...')
+
     name = random.choice(constant.clash_name_list)
     data = json.dumps({'name': name})
     url = constant.clash_url
@@ -20,6 +21,7 @@ def customRequest(url, headers=None, proxies=None):
         try:
             return requests.get(url, headers=headers, proxies=proxies)
         except Exception as e:
+            # random_chose_node()
             print(e)
 
 
@@ -37,3 +39,7 @@ def remove_aria2(path):
         if (re.search(r'\.aria2', i)):
             wait_remove = re.search(r'.*\.aria2', i).group()
             os.remove(path + '\\' + wait_remove)
+
+
+if __name__ == '__main__':
+    judge_node()
